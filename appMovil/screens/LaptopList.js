@@ -1,10 +1,10 @@
 import { View, Text, StyleSheet, FlatList } from "react-native";
 import { getAllLaptops } from "../rests/laptops";
-import { Button } from "@rneui/base";
+import { Button, FAB } from "@rneui/base";
 import { useState } from "react";
 
-// 🧾 Componente principal que muestra la lista de contactos
-export const LaptopList = () => {
+// 🧾 Componente principal que muestra la lista de laptops
+export const LaptopList = ({navigation}) => {
 
   // 🗂️ Estado inicial con algunos contactos de ejemplo
   const [laptopsList, setLaptopsList] = useState([]);
@@ -22,10 +22,10 @@ export const LaptopList = () => {
   };
 
   // 🔄 Función que se llama cuando se obtienen los datos desde el servidor
-  // Actualiza la lista de contactos en pantalla
+  // Actualiza la lista de laptps en pantalla
   const fnRefreshList = (laptops) => {
     console.log("refrescar lista", laptops);
-    setLaptopsList(laptops); // 🔁 Actualiza el estado con los nuevos contactos
+    setLaptopsList(laptops); // 🔁 Actualiza el estado con los nuevos laptps
   };
 
   // 🧱 Vista principal que contiene todo el diseño
@@ -50,6 +50,12 @@ export const LaptopList = () => {
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => <LaptopItem laptop={item} />} // Cómo mostrar cada elemento
       />
+      <FAB
+        title="+"
+        onPress={() => {
+          navigation.navigate("LaptopFormNav")
+        }}
+      />
     </View>
   );
 };
@@ -67,7 +73,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,      // Espacio debajo del título
   },
   item: {
-    borderBottomWidth: 1,  // Línea debajo de cada contacto
+    borderBottomWidth: 1,  // Línea debajo de cada laptp
     borderBottomColor: "#ccc",
     paddingVertical: 10,   // Espacio arriba y abajo del texto
   },
