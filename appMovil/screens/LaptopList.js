@@ -1,23 +1,27 @@
-import { View, Text, StyleSheet, FlatList } from "react-native";
+import { View, Text, StyleSheet, FlatList, TouchableHighlight } from "react-native";
 import { getAllLaptops } from "../rests/laptops";
 import { Button, FAB } from "@rneui/base";
 import { useState } from "react";
 
 // 🧾 Componente principal que muestra la lista de laptops
-export const LaptopList = ({navigation}) => {
+export const LaptopList = ({ navigation }) => {
 
-  // 🗂️ Estado inicial con algunos contactos de ejemplo
+  // 🗂️ Estado inicial con algunos laptops de ejemplo
   const [laptopsList, setLaptopsList] = useState([]);
 
-  // Componente interno que muestra cada contacto en la lista
+  // Componente interno que muestra cada laptop en la lista
   const LaptopItem = ({ laptop }) => {
     return (
-      <View style={styles.item}>
-        <Text>{laptop.id}</Text>
-        <Text>{laptop.marca} {laptop.procesador}</Text>
-        <Text>{laptop.memoria}</Text>
-        <Text>{laptop.disco}</Text>
-      </View>
+      <TouchableHighlight onPress={() => {
+        navigation.navigate("LaptopFormNav", { laptopParam: laptop })
+      }}>
+        <View style={styles.item}>
+          <Text>{laptop.id}</Text>
+          <Text>{laptop.marca} {laptop.procesador}</Text>
+          <Text>{laptop.memoria}</Text>
+          <Text>{laptop.disco}</Text>
+        </View>
+      </TouchableHighlight>
     );
   };
 
@@ -53,7 +57,7 @@ export const LaptopList = ({navigation}) => {
       <FAB
         title="+"
         onPress={() => {
-          navigation.navigate("LaptopFormNav")
+          navigation.navigate("LaptopFormNav", {})
         }}
       />
     </View>

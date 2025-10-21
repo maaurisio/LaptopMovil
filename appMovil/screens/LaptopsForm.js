@@ -1,26 +1,48 @@
 import { View, Text, StyleSheet } from "react-native";
 import { Input, Button } from "@rneui/base";
 import { useState } from "react";
-import { saveLaptopsRest } from "../rests/laptops";
+import { saveLaptopsRest, updateLaptopsRest } from "../rests/laptops";
 import { Alert } from "react-native";
 
-export const LaptopsForm = ({ navigation }) => {
-  const [marca, setMarca] = useState("");
-  const [procesador, setProcesador] = useState("");
-  const [memoria, setMemoria] = useState("");
-  const [disco, setDisco] = useState("");
+export const LaptopsForm = ({ navigation, route }) => {
 
+  let laptopRetrivied = route.params?.laptopParam ?? null;
+  let isNew = laptopRetrivied == null;
+  //si es nuevo?? asigna null, caso contrario (:) asigna el valor recuperado
+  //poner como valores los campos del api
+  const [marca, setMarca] = useState(isNew ? null : laptopRetrivied.marca);
+  const [procesador, setProcesador] = useState(isNew ? null : laptopRetrivied.procesador);
+  const [memoria, setMemoria] = useState(isNew ? null : laptopRetrivied.memoria);
+  const [disco, setDisco] = useState(isNew ? null : laptopRetrivied.disco);
+
+  console.log("¿Es nuevo?", isNew);
+  console.log("Laptop recuperado:", laptopRetrivied);
 
   const showMesage = () => {
-    Alert.alert("CONFIRMACIÓN", "SE HA CREADO LA LAPTOP");
+    Alert.alert("CONFIRMACIÓN", isNew ? "SE HA CREADO LA LAPTOP" : "LAPTOP ACTUALIZADO");
+    navigation.goBack();
   }
 
 
-  const saveLaptops = () => {
-    navigation.goBack();
+  const createLaptops = () => {
+    console.log("creando laptop: ")
 
     saveLaptopsRest(
       {
+        marca: marca,
+        procesador: procesador,
+        memoria: memoria,
+        disco: disco
+      },
+      showMesage
+    );
+  };
+
+  const updateLaptops = () => {
+    console.log("actualizando laptop: ");
+    updateLaptopsRest(
+      {
+        id: laptopRetrivied.id,
         marca: marca,
         procesador: procesador,
         memoria: memoria,
@@ -54,7 +76,7 @@ export const LaptopsForm = ({ navigation }) => {
         placeholder="Disco"
         onChangeText={(value) => setDisco(value)}
       />
-      <Button title="GUARDAR" onPress={saveLaptops} />
+      <Button title="GUARDAR" onPress={isNew ? createLaptops : updateLaptops} />
     </View>
   );
 };
