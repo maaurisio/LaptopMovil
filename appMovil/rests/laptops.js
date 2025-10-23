@@ -3,16 +3,16 @@ const PORT = 3001;
 const URL = "http://" + IP + ":" + PORT + "/";
 
 export const getAllLaptops = (fnRefreshList) => {
-  console.log("Mostrando laptops: ");
-  fetch(URL + "laptops")
-    .then((response) => response.json())
-    .then((body) => {
-      console.log("Respuesta del servidor:", body);
-      fnRefreshList(body);
-    })
-    .catch((error) => {
-      console.log("❌ Error al obtener laptops:", error);
-    });
+    console.log("Mostrando laptops: ");
+    fetch(URL + "laptops")
+        .then((response) => response.json())
+        .then((body) => {
+            console.log("Respuesta del servidor:", body);
+            fnRefreshList(body);
+        })
+        .catch((error) => {
+            console.log("❌ Error al obtener laptops:", error);
+        });
 };
 
 
@@ -30,13 +30,13 @@ export const saveLaptopsRest = (laptop, fnShowMessage) => {
         })
     }
     fetch(
-        URL+"laptops", config
+        URL + "laptops", config
     )
-    .then(response => response.json())
-    .then(body=>{
-        fnShowMessage();
-        console.log(body);
-    })
+        .then(response => response.json())
+        .then(body => {
+            fnShowMessage("se ha creado la laptop");
+            console.log(body);
+        })
 }
 
 export const updateLaptopsRest = (laptop, fnShowMessage) => {
@@ -54,11 +54,22 @@ export const updateLaptopsRest = (laptop, fnShowMessage) => {
         })
     }
     fetch(
-        URL+"laptops/"+laptop.id, config
+        URL + "laptops/" + laptop.id, config
     )
-    .then(response => response.json())
-    .then(body=>{
-        fnShowMessage();
-        console.log(body);
-    })
+        .then(response => response.json())
+        .then(body => {
+            fnShowMessage("se ha actualizado la laptop");
+            console.log(body);
+        })
 }
+
+export const deleteLaptopsRest = (id, fnShowMessage) => {
+
+    fetch(`${URL}laptops/${id}`, { method: "DELETE" })
+        .then(response => response.json())
+        .then(body => {
+            console.log("📦 Respuesta del servidor:", body);
+            fnShowMessage(`Se ha eliminado la laptop con id ${body.id}`);
+        })
+        .catch(error => console.error("❌ Error al eliminar:", error));
+};

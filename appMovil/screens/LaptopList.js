@@ -1,13 +1,20 @@
 import { View, Text, StyleSheet, FlatList, TouchableHighlight } from "react-native";
 import { getAllLaptops } from "../rests/laptops";
 import { Button, FAB } from "@rneui/base";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 // 🧾 Componente principal que muestra la lista de laptops
 export const LaptopList = ({ navigation }) => {
 
   // 🗂️ Estado inicial con algunos laptops de ejemplo
   const [laptopsList, setLaptopsList] = useState([]);
+
+  //useEffect() ejecuta código automáticamente cuando el componente se monta, actualiza o se desmonta.
+  //cuando tiene corchetes significa que se hará una sola vez
+  useEffect(() => {
+    console.log("ejecuto la funcion del useEffect")
+    getAllLaptops(fnRefreshList);
+  }, []);
 
   // Componente interno que muestra cada laptop en la lista
   const LaptopItem = ({ laptop }) => {
@@ -38,7 +45,7 @@ export const LaptopList = ({ navigation }) => {
       {/* 🏷️ Título */}
       <Text style={styles.title}>Lista de Laptops</Text>
 
-      {/* 🔘 Botón para consultar los laptops del servidor */}
+      {/* 🔘 Botón para consultar los laptops del servidor 
       <Button
         title="Consultar Laptops"
         onPress={() => {
@@ -47,6 +54,7 @@ export const LaptopList = ({ navigation }) => {
           getAllLaptops(fnRefreshList);
         }}
       />
+      */}
 
       {/* 📋 FlatList muestra automáticamente todasa las laptops */}
       <FlatList
